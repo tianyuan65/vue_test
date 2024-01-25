@@ -1,6 +1,12 @@
 <template>
   <ul class="todo-main">
-    <TodoItem v-for="todoObj in todos" :key="todoObj.id" :todo="todoObj"/>
+    <TodoItem 
+      v-for="todoObj in todos" 
+      :key="todoObj.id" 
+      :todo="todoObj" 
+      :checkTodo="checkTodo"
+      :deleteTodo="deleteTodo"
+    />
   </ul>
 </template>
 
@@ -9,7 +15,12 @@
   export default {
       name:'TodoList',
       components:{TodoItem},
-      props:['todos']
+      // checkTodo只是在这里走一趟，立马要去TodoItem组件
+      props:[
+        'todos',
+        'checkTodo',
+        'deleteTodo'
+      ]
   }
 </script>
 

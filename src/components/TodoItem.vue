@@ -2,11 +2,16 @@
   <div>
     <li>
       <label>
-        <!-- 给impute绑定checked的选项，具体选项是否勾选根据todo.done的值决定 -->
-        <input type="checkbox" :checked="todo.done"/>
+        <!-- 给input绑定checked的选项，具体选项是否勾选根据todo.done的值决定；方法1：绑定点击事件handleCheck，并获取点击的item的id -->
+        <!-- <input type="checkbox" :checked="todo.done" @click="handleCheck(todo.id)"/> -->
+        <!-- 方法2：绑定change事件，事件函数名依然是handleCheck -->
+        <input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)"/>
+        <!-- 给input输入框配置v-model属性，与todo.done绑定，可决定checkbox是否被勾选，是个语法糖，但因为修改了props报了错， -->
+        <!-- v-model很好，它只是双向数据绑定的配置工具，但不能给它绑上由props传进来的数据，修改了props传来的数据会报错 -->
+        <!-- <input type="checkbox" v-model="todo.done"/> -->
         <span>{{todo.name}}</span>
       </label>
-      <button class="btn btn-danger" style="display:none">删除</button>
+      <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
     </li>
   </div>
 </template>
@@ -15,8 +20,23 @@
   export default {
       name:'TodoItem',
       // 声明接收todo对象
-      props:['todo'],
-      
+      props:[
+        'todo',
+        'checkTodo',
+        'deleteTodo'
+      ],
+      methods:{
+        handleCheck(id){
+          // 在该函数内，通知App组件，将对应的todo对象的值取反，接收从父组件TodoList来的checkTodo，并将参数id传进去
+          this.checkTodo(id)
+        },
+        handleDelete(id){
+          // 在该函数内，通知App组件删除对应的id的对象
+          if (confirm('确定删除？')) {
+            this.deleteTodo(id)
+          }
+        }
+      }
   }
 </script>
 
@@ -54,5 +74,14 @@
 
   li:last-child {
     border-bottom: none;
+  }
+
+  li:hover{
+    background-color: lightpink;
+  }
+
+  /* 当鼠标悬浮时显示button */
+  li:hover button{
+    display: block;
   }
 </style>
