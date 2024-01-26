@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02-sessionStorage</title>
+</head>
+<body>
+    <!-- sessionStorage的API与localStorage完全一样，也可以添加、读取、删除、清空数据，只不过localStorage关了浏览器也能找到记录，sessionStorage关了浏览器就没了 -->
+    <h2>sessionStorage</h2>
+    <button onclick="saveData()">click to save one data</button><br><br>
+    <button onclick="readData()">click to read data</button><br><br>
+    <button onclick="deleteData()">click to delete data</button><br><br>
+    <button onclick="deleteAllData()">click to clear data</button>
+
+    <script>
+        let p={name:'王梅',age:25}
+        console.log(p.toString());
+        // 保存、添加数据
+        function saveData(){
+            // 这是简写了完整写法是window.sessionStorage.setItem('msg','hello!')，调用sessionStorage的setItem API，向本地存储中添加数据，写成字符串的键值对就行
+            sessionStorage.setItem('msg','hello!!')
+            sessionStorage.setItem('msg2',666)
+            // JSON的stringify方法能把一个对象编译为字符串的形式
+            sessionStorage.setItem('person',JSON.stringify(p))
+        }
+        // 读取数据
+        function readData(){
+            // 这也是简写了，想读哪个就把键名作为参数就行
+            console.log(sessionStorage.getItem('msg'))  //hello!!
+            console.log(sessionStorage.getItem('msg2'))  //666
+            console.log(sessionStorage.getItem('person'));  //{"name":"王梅","age":25}
+            const result=sessionStorage.getItem('person')
+            // 解析JSON字符串为js的字符串
+            console.log(JSON.parse(result))  //{name: '王梅', age: 25}
+        }
+        // 删除数据
+        function deleteData(){
+            // 这也是简写了，一般删哪个就写哪个，在这儿就写一个了
+            sessionStorage.removeItem('msg2')
+        }
+        // 清空
+        function deleteAllData(){
+            // 这也是简写了，调用clear，全删除
+            sessionStorage.clear()
+        }
+    </script>
+</body>
+</html>

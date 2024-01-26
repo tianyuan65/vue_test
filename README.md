@@ -92,3 +92,17 @@
     * (2). 子组件 => 父组件 通信(要求父组件先给子组件一个函数)
 * 3. 使用v-model时要切记：v-model绑定的值不能是props传过来的值，因为props是不可以修改的，它只读不可改！！！！
 * 4. props传过来的若是对象类型的值，修改对象中等输定时Vue不会报错，但别这么干，我的vscode没关闭代码检查，写代码的时候就报错了。
+
+## 十、webStorage
+* 1. 存储内容大小一般支持5MB左右(不同浏览器可能还不一样)
+* 2. 浏览器端通过Window.sessionStorage 和 Window.localStorage属性来实现本地存储机制，若只是本次会话时使用，比如4399里的游戏，就用sessionStorage；但若下次玩的时候想要有上次的记录以及继续上次的关卡玩，那就用localStorage。
+* 3. 相关API：
+    * 3.1 xxxxStorage.setItem('key','value')：该方法接受一个键和值作为参数，会把键值对添加到存储中，如果键名存在，则更新其对应的值。
+    * 3.2 xxxxStorage.getItem('key')：该方法接受一个键名作为参数，返回键名对应的值。
+    * 3.3 xxxxStorage.removeItem('key')：该方法接收一个键名作为参数，返回键名对应的值。
+    * 3.4 xxxxStorage.clear()：该方法会清空存储中的所有数据。
+* 4. 备注：
+    * 4.1 sessionStorage存储的内容会随着浏览器窗口关闭而消失。
+    * 4.2 localStorage存储的内容，需要手动清除才会消失。
+    * 4.3  xxxxStorage.getItem('key')，如果key对应的value获取不到，那么getItem的返回值是一个null
+    * 4.4 JSON.parse(null)的结果依然是null，具体例子把01-localStorage.html 和 02-sessionStorage.html运行试一下
