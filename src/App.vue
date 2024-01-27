@@ -24,11 +24,9 @@
       },
       data(){
         return {
-          todos:[
-            {id:'001',name:'睡懒觉',done:true},
-            {id:'002',name:'睡觉',done:true},
-            {id:'003',name:'学习',done:false},
-          ]
+          // 不把todos写成空数组写死，在这里获取存储在localStorage的数据
+          // 若是第一次登陆或清空本地存储后刷新会报错，因为从本地存储获取的是null，所以加个[]，表示本地存储有数据就获取数据，没有就默认是空数组
+          todos:JSON.parse(localStorage.getItem('todos'))  || []
         }
       },
       methods:{
@@ -65,6 +63,15 @@
             // 过滤掉done值为false的todo对象，这是为了去掉done值为true的todo对象
             return !todo.done
           })
+        }
+      },
+      watch:{
+        todos:{
+          // 深度监测
+          depp:true,
+          handler(value){
+            localStorage.setItem('todos',JSON.stringify(value))
+          }
         }
       }
   }
