@@ -6,7 +6,7 @@
 
     <!-- 方法1：由于v-once在StaffInfo组件标签上，所以是给StaffInfo组件实例对象身上绑定了事件，事件名叫atstaff，若触发了这个事件，getStaffName函数就会被调用 -->
     <!-- 通过父组件给子组件绑定一个自定义事件实现：子组件给父组件传递数据 -->
-    <StaffInfo @atstaff="getStaffName"/>
+    <StaffInfo @atstaff="getStaffName" @demo="m1"/>
     <!-- 设置只触发一次 -->
     <!-- <StaffInfo @atstaff.once="getStaffName"/> -->
 
@@ -36,6 +36,9 @@
           // 自定义事件方式绑定事件监听，传递数据
           getStaffName(name,...rest){
             console.log('App got staff name:',name,...rest);
+          },
+          m1(){
+            console.log('demo event is touched off');
           }
         },
         mounted(){
