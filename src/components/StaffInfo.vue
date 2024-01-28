@@ -28,15 +28,16 @@
             sendStaffName(){
                 // 触发StaffInfo组件实例对象身上的atstaff事件
                 this.$emit('atstaff',this.name,111,222,'444')
-                this.$emit('demo')
+                // this.$emit('demo')
+                this.$emit('click')
             },
             unbind(){
                 // 解绑一个自定义事件
-                // this.$off('atstaff')
+                this.$off('atstaff')
                 // 解绑多个自定义事件，将需要解绑的多个事件名写在数组里，再作为参数传进去
                 // this.$off(['atstaff','demo'])
                 // 解绑所有自定义事件，真暴力
-                this.$off()
+                // this.$off()
             },
             death(){
                 // 销毁当前组件实例对象，销毁后所有StaffInfo组件实例的自定义事件全都不奏效了

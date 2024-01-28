@@ -106,3 +106,22 @@
     * 4.2 localStorage存储的内容，需要手动清除才会消失。
     * 4.3  xxxxStorage.getItem('key')，如果key对应的value获取不到，那么getItem的返回值是一个null
     * 4.4 JSON.parse(null)的结果依然是null，具体例子把01-localStorage.html 和 02-sessionStorage.html运行试一下
+
+## 十一、组件的自定义事件
+* 1. 一种组件间通信的方式，适用于子组件==>父组件
+* 2. 使用场景：A是父组件，B是子组件，子组件想给父组件传数据，那么就要在A中给B绑定自定义事件(事件的回调在父组件中)
+* 3. 绑定自定义事件
+    * (1). 方法1，在父组件中：```<Demo @atstaff="test"/>``` 或 ```<Demo v-on:atstaff="test"/>```
+    * (2). 方法2，在父组件中：
+        * ```
+            <Demo ref="demo"/>
+            ......
+            methods:{
+                this.$refs.staff.$on('atstaff',this.getStaffName)
+            }
+          ```
+    * (3). 若想让自定义事件只触发一次，可以使用once修饰符，或$once方法
+* 4. 触发自定义事件：```this.$emit('atstaff',数据)```
+* 5. 解绑自定义事件```this.$off('atstaff')```
+* 6. 组件上也可以绑定原生DOM事件，需要配合native修饰符使用
+* 7. 注意：通过```this.$ref.xxx.$on('atstaff',callback)```绑定自定义事件时，回调要么配置在methods中，就像绑定自定义事件的第二种方法，要么用箭头函数，否则提示的指向会出现问题！！
