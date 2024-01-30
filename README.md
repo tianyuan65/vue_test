@@ -177,3 +177,8 @@
           ```
     * 2.4 提供数据：```pubsub.publish('xxx',数据)```
     * 2.5 最好在beforeDestroy钩子中，用PubSub.unsubscribe(pubId)去取消订阅
+
+## 十四、nextTick
+* 1. 语法：this.$nextTick(callback)
+* 2. 作用：在下一次DOM更新结束后执行其指定的回调
+* 3. 什么时候用？当改变数据后，要基于更新后的新DOM进行某些操作时，要在nextTick所指定的回调函数中执行，注：回调函数需要写成普通函数，写成箭头函数this的指向会变
