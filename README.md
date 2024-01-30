@@ -127,7 +127,7 @@
 * 7. 注意：通过```this.$ref.xxx.$on('atstaff',callback)```绑定自定义事件时，回调要么配置在methods中，就像绑定自定义事件的第二种方法，要么用箭头函数，否则提示的指向会出现问题！！
 
 ## 十二、全局事件总线(GlobalEventBus)
-* 1. 一种组件间通信的方式，适用于任意组件键通信
+* 1. 一种组件间通信的方式，适用于任意组件间通信
 * 2. 安装全局事件总线
     * ```
         // 创建Vue实例对象
@@ -158,3 +158,21 @@
             }
           ```
 * 4. 最好在beforeDestroy钩子中，用$off去解绑**当前组件所用到的事件。$off必须得传递当前组件用到的事件名作为参数，啥也不写的意思是绑在傀儡身上的所有事件全部解绑，会出事**
+
+## 十三、消息订阅与发布(pubsub)
+* 1. 一种组件间通信的方式适用于任意组件间通信
+* 2. 使用步骤：
+    * 2.1 安装PubSub：npm i -S pubsub-js
+    * 2.2 引入：import pubsub from 'pubsub-js'
+    * 2.3 接收数据：A组件想要接收数，则在A组件中订阅消息，订阅的回调留在A组件自身
+        * ```
+            methods:{
+                demo(data){......}
+            }
+            ......
+            mounted(){
+                this.pubId=pubsub.subscribe('xxx',this.demo)  //订阅消息
+            }
+          ```
+    * 2.4 提供数据：```pubsub.publish('xxx',数据)```
+    * 2.5 最好在beforeDestroy钩子中，用PubSub.unsubscribe(pubId)去取消订阅
