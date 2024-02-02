@@ -1,76 +1,38 @@
 <template>
-  <div id="root">
-    <TestAnimateVue/>
-    <TestAnimateVue2/>
-    <TestAnimateVue3/>
+  <div>
+    <button @click="getStudentInfo">get student information</button>
+    <button @click="getCarInfo">get car information</button>
+
   </div>
 </template>
 
 <script>
-  import TestAnimateVue from './components/TestAnimate.vue'
-  import TestAnimateVue2 from './components/TestAnimate2.vue'
-  import TestAnimateVue3 from './components/TestAnimate3.vue'
-
-
+  import axios from 'axios'
   export default {
       name:'App',
-      components:{TestAnimateVue,TestAnimateVue2,TestAnimateVue3},
-      data(){
-        return {
-          
+      methods:{
+        getStudentInfo(){
+          // 找端口号为8080的代理服务器要数据，前缀要紧跟端口号，后面该怎么写怎么写
+          axios.get('http://localhost:8080/api/students').then(
+            response=>{
+              console.log('request succeed',response.data);
+            },
+            error=>{
+              console.warn('failed to request',error.message);
+            }
+          )
+        },
+        getCarInfo(){
+          axios.get('http://localhost:8080/demo/cars').then(
+            response=>{
+              console.log('request succeed',response.data);
+            },
+            error=>{
+              console.log('failed to request',error.message);
+            }
+          )
         }
-      },
+      }
   }
 </script>
 
-<style>
-  /*base*/
-  body {
-    background: #fff;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 4px 12px;
-    margin-bottom: 0;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-  }
-
-  .btn-danger {
-    color: #fff;
-    background-color: #da4f49;
-    border: 1px solid #bd362f;
-  }
-
-  .btn-danger:hover {
-    color: #fff;
-    background-color: #bd362f;
-  }
-  
-  .btn-safe{
-    color: #fff;
-    background-color: aqua;
-    border: rgb(35, 66, 75);
-    margin-right: 5px;
-  }
-
-  .btn:focus {
-    outline: none;
-  }
-
-  .todo-container {
-    width: 600px;
-    margin: 0 auto;
-  }
-  .todo-container .todo-wrap {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-</style>

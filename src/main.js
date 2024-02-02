@@ -8,10 +8,7 @@ Vue.config.productionTip=false
 // 创建Vue实例对象
 new Vue({
     render:h=>h(App),
-    // mounted(){
-    //     // 挂载三秒后销毁该Vue实例
-    //     setTimeout(() => {
-    //         this.$destroy()
-    //     }, 3000);
-    // }
+    beforeCreate(){
+        Vue.prototype.$bus=this
+    }
 }).$mount('#app')
