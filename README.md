@@ -248,3 +248,84 @@
     * 说明：
         * (1). 优点：可以配置多个代理，且可以灵活地控制请求是否走代理
         * (2). 缺点：配置略微繁琐，请求资源时必须加前缀
+
+## 十七、插槽
+* 1. 作用：让父组件可以向子组件的自定位置茶府html结构，也是一种组件间通信的方式，适用于**父组件 ===> 子组件**
+* 2. 分类：默认插槽、具名插槽、作用域插槽
+* 3. 使用方式
+    * 3.1 默认插槽：
+        * ```
+            父组件中：
+            <EntertainmentCategory>
+                <div>html结构</div>
+            </EntertainmentCategory>
+            子组件中：
+            <template>
+                <div>
+                    <!-- 定义插槽 -->
+                    <slot>slot's default content.</slot>
+                </div>
+            </template>
+          ```
+    * 3.2 具名插槽
+        * ```
+            父组件中：
+            <EntertainmentCategory>
+                <template slot="center">
+                    <div>html结构1</div>
+                </template>
+
+                <template v-slot:footer>
+                    <div>html结构2</div>
+                </template>
+            </EntertainmentCategory>
+            子组件中：
+            <template>
+                <div>
+                    <!-- 定义插槽 -->
+                    <slot name="center">slot's default content1.</slot>
+                    <slot name="footer">slot's default content2.</slot>
+                </div>
+            </template>
+          ```
+    * 3.3 作用域插槽
+        * 3.3.1 理解：数据在组件自身，但根据数据生成的机构需要组件的使用者来决定(games数据在EntertainmentCategory组件中，但使用数据所遍历出来的结构由App组件决定)
+        * 3.3.2 具体编码
+            * ```
+                父组件中：
+                <EntertainmentCategory>
+                    <template scope="scopeData">
+                        <!-- 生成的是ul列表 -->
+                        <ul>
+                            <li v-for="(game,index) in scopeData.games" :key="index">{{game}}</li>
+                        </ul>
+                    </template>
+                </EntertainmentCategory>
+
+                <EntertainmentCategory>
+                    <template slot-scope="scopeData">
+                        <!-- 生成的是h4列表 -->
+                        <h4 v-for="(game,index) in games" :key="index">{{game}}</h4>
+                    </template>
+                </EntertainmentCategory>
+                子组件中：
+                <template>
+                    <div>
+                        <!-- 定义插槽 -->
+                        <slot :games="games">slot's default content1.</slot>
+                    </div>
+                </template>
+
+                <script>
+                    export default {
+                        name:'EntertainmentCategory',
+                        props:['title'],
+                        // 数据在子组件自身
+                        data() {
+                            return {
+                                games:['光与夜之恋','未定事件簿','恋与制作人','和平精英'],
+                            }
+                        },
+                    }
+                </script>
+              ```
