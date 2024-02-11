@@ -458,3 +458,21 @@
     * 4.2 组件中读取vuex中的数据：$store.state.sum
     * 4.3 组件中修改vuex中的数据：$store.dispatch('actions中的方法名',value)或$store.commit('mutations中的方法名-一般是全大写的',value)
     * 备注：若无网络请求或其他业务逻辑，组件中也可以越过actions，即组件当中不写dispatch，直接编写commit
+* 5. getters的使用
+    * 5.1 概念：当state中的数据需要经过加工后再使用时，可以使用getters加工。
+    * 5.2 在store.js中追加getters配置
+        * ```
+            // 定义getters--用于将state中的数据进行加工
+            const getters={
+                // 表示大10倍的这个函数接收参数state
+                bigSum(state){
+                    return state.sum*10
+                }
+            }
+            // 创建并暴露store
+            export default new Vuex.Store({
+                ......
+                getters
+            })
+          ```
+    * 5.3 组件中读取数据：```$store.getters.bigSum```
