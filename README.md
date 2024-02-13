@@ -476,3 +476,24 @@
             })
           ```
     * 5.3 组件中读取数据：```$store.getters.bigSum```
+* 6. 四个map方法的使用
+    * 6.1 mapState方法：用于帮助我们映射state中的数据为计算属性，就是方便从state中读取数据
+        * ```
+            computed:{
+                // 借助mapState生成计算属性，从state中读取数据（对象写法：用扩展运算符，将状态映射依次展开到计算属性当中）
+                ...mapState({sum:'sum',staff:'staff',firm:'firm'}),
+                // 借助mapState生成计算属性，从state中读取数据（数组写法：也是用扩展运算符麻酱状态映射到计算属性中）
+                // 注意点：若想用数组写法实现，就要保证生成的计算属性名和$store.state里读取出来的数据名一致
+                ...mapState(['sum','staff','firm']),
+            }
+          ```
+    * 6.2 mapGetters方法：用于帮助我们映射getters中的数据为计算属性，就是方便从getters中读取数据
+        * ```
+            // 借助mapGetters生成计算属性，从getters中读取数据，对象写法
+            ...mapGetters({bigSum:'bigSum'}),
+            // 借助mapGetters生成计算属性，从getters中读取数据，数组写法
+            ...mapGetters(['bigSum'])
+          ```
+    * 6.3 mapActions方法：
+        * 
+    * 6.4 mapMutations方法：
