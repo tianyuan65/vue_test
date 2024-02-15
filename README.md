@@ -515,3 +515,138 @@
             }
           ```
     * 备注：mapActions和mapMutations使用时，若需要传递参数，需要在模板中绑定事件时传递好参数，否则参数是事件对象event
+* 7. 模块化 + 命名空间
+    * 7.1 目的：让代码更好维护，让多种数据分类更加明确
+    * 7.2 修改store.js
+        * ```
+            const countOptions={
+                // 命名空间配置，作用：配置了该配置项，组件里的mapState才能捕捉到暴露的名为count的配置，不写该配置也可以，但是组件里引入的时候，就引入count，并且在模板里好好写
+                namespaced:true,
+                actions:{
+                    // 组件中调用$store的dispatch方法后，调用该函数，函数内传递两个参数，
+                    // 第一个参数是上下文对象；第二个是要加的数值就是组件里定的selectNum
+                    plusOdd(context,value){
+                        console.log('plusOdd function in actions is called');
+                        // 上下文里的state是奇数时才提交PLUSODD函数，这不判断的操作并不在mutations进行，mutations只是单纯地操作数据，在actions才进行判断、异步操作等
+                        if (context.state.sum % 2) {
+                            context.commit('PLUSODD',value)
+                        }
+                    },
+                    asyncPlus(context,value){
+                        console.log('asyncPlus function in actions is called');
+                        setTimeout(() => {
+                            context.commit('ASYNCPLUS',value)
+                        }, 500);
+                    }
+                },
+                mutations:{// 还是传递两个参数，第一个是sum，也就是state，这是为了监测数据的变化；第二个是要加的数值就是组件里定的selectNum
+                    PLUS(state,value){
+                        // 更新数据
+                        state.sum +=value
+                        console.log('PLUS function in mutations is called');
+                    },
+                    MINUS(state,value){
+                        // 更新数据
+                        state.sum -= value
+                        console.log('MUNIS function in mutations is called');
+                    },
+                    PLUSODD(state,value){
+                        // 更新数据
+                        state.sum += value
+                    },
+                    ASYNCPLUS(state,value){
+                        // 更新数据
+                        state.sum += value
+                    },},
+                state:{
+                    sum:0,  //当前和
+                    firm:'729声工场',
+                    staff:'谷江山',
+                },
+                getters:{
+                    // 表示大10倍的这个函数接收参数state
+                    bigSum(state){
+                        return state.sum*10
+                    }
+                }
+            }
+            const personOptions={
+                // 命名空间配置，作用：配置了该配置项，组件里的mapState才能捕捉到暴露的名为count的配置，不写该配置也可以，但是组件里引入的时候，就引入count，并且在模板里好好写
+                namespaced:true,
+                actions:{
+                    addPersonX(context,value){
+                        if(value.name.indexOf('x')===0){
+                            context.commit('ADDPERSON',value)
+                        }else{
+                            alert('the person’s first name initial have to be X')
+                        }
+                    },
+                    // 向外部服务器发送请求获取数据，不需要传递value参数
+                    connectPersonServer(context){
+                        axios.get('https://api.uixsj.cn/hitokoto/get?type=social').then(
+                            value=>{
+                                context.commit('ADDPERSON',{id:nanoid(),name:value.data})
+                            },error=>{
+                                alert(error.message)
+                            }
+                        )
+                    }
+                },
+                mutations:{
+                    ADDPERSON(state,value){
+                        console.log('ADDPERSON function in mutations is called');
+                        state.personList.push(value)
+                    }
+                },
+                state:{
+                    personList:[
+                        {id:'001',name:'Osborn'}
+                    ]
+                },
+                getters:{
+                    firstPersonName(state){
+                        // 返回人员列表了第一个人的人名
+                        return state.personList[0].name
+                    }
+                }
+            }
+            export default new Vuex.Store({
+                modules:{
+                    count:countOptions,
+                    person:personOptions
+                }
+            })
+          ```
+    * 7.3 开启命名空间后，组件中读取state数据
+        * ```
+            // 方式一：自己直接读取
+            this.$store.state.person.personList
+            // 方式二：借助mapState读取
+            ...mapState('count',['sum','staff','firm'])
+          ```
+    * 7.4 开启命名空间后，组件中读取getters数据
+        * ```
+            // 方式一：自己直接读取
+            this.$store.getters['person/firstPersonName']
+            // 方式二：借助mapGetters读取
+            ...mapGetters('count',['bigSum'])
+          ```
+    * 7.5 开启命名空间后，组件中调用dispatch
+        * ```
+            // 方式一：自己直接读取
+            this.$store.dispatch('person/addX',person)
+            // 方式二：借助mapActions
+            ...mapActions('count',{incrementOdd:'plusOdd',asyncIncrement:'asyncPlus'})
+          ```
+    * 7.6 开启命名空间后，组件中调用commit
+        * ```
+            // 方式一：自己直接读取
+            this.$store.commit('person/ADDPERSON',person)
+            // 方式二：借助mapMutations
+            ...mapMutations('count',{increment:'PLUS',decrement:'MINUS'})
+          ```
+## 十九、
+
+
+
+* 当打包构建应用时，JavaScript 包会变得非常大，影响页面加载。如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就会更加高效
