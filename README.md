@@ -645,8 +645,48 @@
             // 方式二：借助mapMutations
             ...mapMutations('count',{increment:'PLUS',decrement:'MINUS'})
           ```
-## 十九、
+## 十九、路由
+* 1. 理解：一个路由(route)就是一组映射关系(key-value)，多个路由需要路由器(router)进行管理
+* 2. 前端路由：key是路径，value是组件
+* 3. 基本使用
+    * 3.1 安装vue-router，命令：npm i vue-router@3，vue2环境下安装使用vue-router@3，vue3环境下安装vue-router@4
+    * 3.2 应用插件：Vue.use(VueRouter)
+    * 3.3 编写router配置项
+        * ```
+            // 该文件专门用于创建整个应用的路由器
+            import VueRouter from "vue-router";
+            // 引入组件
+            import AboutPage from '../components/AboutPage'
+            import HomePage from '../components/HomePage'
+
+            // VueRouter是个构造函数，可以实例化来创建路由器，并暴露该路由器
+            export default new VueRouter({
+                // 一组一组的路由们
+                routes:[
+                    // 一组路由
+                    {
+                        path:'/about',
+                        component:AboutPage
+                    },
+                    {
+                        path:'/home',
+                        component:HomePage
+                    }
+                ]
+            })
+          ```
+    * 3.4 实现切换(active-class可配置高亮样式)
+        * ```<router-link class="list-group-item" active-class="active" to="/about">About</router-link>```
+    * 3.5 指定组件的展示/呈现位置
+        * ```<router-view></router-view>```
+* 4. 几个注意点：
+    * 4.1 路由组件通常存放在pages文件夹，一般组件通常存放在components文件夹。
+    * 4.2 通过切换，“隐藏”了的路由组件，默认是被销毁掉的，需要的时候再去挂载。
+    * 4.3 每个组件都有自家的$route属性，里面存储着自己的路由信息。
+    * 4.4 整个应用只有一个路由器router，可以通过组件的$router属性获取到。
 
 
 
 * 当打包构建应用时，JavaScript 包会变得非常大，影响页面加载。如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就会更加高效
+* 总结：页面跳转就是路由跳转
+* 路由规则-key：value的组合，key是路径，value是组件，多组路由规则交由路由器(App)管理
