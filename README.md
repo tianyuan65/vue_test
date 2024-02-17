@@ -684,6 +684,36 @@
     * 4.2 通过切换，“隐藏”了的路由组件，默认是被销毁掉的，需要的时候再去挂载。
     * 4.3 每个组件都有自家的$route属性，里面存储着自己的路由信息。
     * 4.4 整个应用只有一个路由器router，可以通过组件的$router属性获取到。
+* 5. 多级/嵌套路由
+    * 5.1 配置路由规则，使用children配置项
+        * ```
+            routes:[
+                // 一组路由，一级路由的path属性值路径前面必须写/
+                {
+                    path:'/about',
+                    component:AboutPage
+                },
+                {
+                    path:'/home',
+                    component:HomePage,
+                    // 通过children配置子级路由
+                    children:[
+                        // 但，若是某一个路由的子路由，前面就不加/，就是children里的东西，在底层设计时，已经帮我们加了/
+                        {
+                            path:'message',  // 一定不要写，/message
+                            component:MessageList
+                        },
+                        {
+                            // 要么上面那么写，要么把父路由的全写上，就像/home/message
+                            path:'/home/news',  // 一定不要写，/news，但可以写成/home/news
+                            component:NewsList
+                        }
+                    ]
+                },
+            ]
+          ```
+    * 5.2 跳转(要写完整路径)
+        * ```<router-link class="list-group-item" active-class="active" to="/home/news">News</router-link>```
 
 
 
