@@ -714,6 +714,30 @@
           ```
     * 5.2 跳转(要写完整路径)
         * ```<router-link class="list-group-item" active-class="active" to="/home/news">News</router-link>```
+* 6. 路由的query参数
+    * 6.1 传递参数，在MessageList组件中
+        * ```
+            <li v-for="m in messageItem" :key="m.id">
+                <!-- 跳转路由并携带query参数，to的字符串写法，先变成js表达式识别模板字符串，然后再用es6表达变量的方式 -->
+                <router-link :to="`/home/message/detail?id=${m.id}&title=${m.title}`">{{m.title}}</router-link>
+
+                <!-- 跳转路由并携带query参数，to的对象写法，path路径代表跳转到的组件路径，query属性里是需要携带的参数 -->
+                <router-link :to="{
+                    path:'/home/message/detail',
+                    query:{
+                        id:m.id,
+                        title:m.title
+                    }
+                }">
+                    {{m.title}}
+                </router-link>
+            </li>
+          ```
+    * 6.2 在展示的组件中接收参数，在MessageDetail组件中
+        * ```
+            $route.query.id
+            $route.query.title
+          ```
 
 
 
