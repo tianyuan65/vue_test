@@ -738,6 +738,90 @@
             $route.query.id
             $route.query.title
           ```
+* 7. 命名路由
+    * 7.1 作用：可以简化路由的跳转
+    * 7.2 如何使用？
+        * 1. 给路由命名：
+            * ```
+                {
+                    name:'guanyu',  // 给路由命名
+                    path:'/about',
+                    component:AboutPage
+                },
+                {
+                    path:'/home',
+                    component:HomePage,
+                    children:[
+                        {
+                            // 要么上面那么写，要么把父路由的全写上，就像/home/message
+                            name:'xiangqing',  // 给路由命名
+                            path:'/home/news',
+                            component:NewsList
+                        }
+                    ]
+                }
+              ```
+        * 2. 简化跳转
+            * ```
+                <!-- 简化前，需要写完整的路径 -->
+                <router-link :to="`/home/message/detail?id=${m.id}&title=${m.title}`">{{m.title}}</router-link>
+                <!-- 简化后，直接通过名字跳转 -->
+                <router-link :to="{name:'gunyu'}">About</router-link>
+                <!-- 简化写法配合传递参数 -->
+                <router-link :to="{
+                    name:'xiangqing',
+                    query:{
+                        id:m.id,
+                        title:m.title
+                    }
+                }">
+                    {{m.title}}
+                </router-link>
+              ```
+* 8. 路由的params参数
+    * 8.1 配置路由声明接收params参数
+        * ```
+            {
+                path:'/home',
+                component:HomePage,
+                children:[
+                    // 但，若是某一个路由的子路由，前面就不加/，就是children里的东西，在底层设计时，已经帮我们加了/
+                    {
+                        path:'message',
+                        component:MessageList,
+                        children:[
+                            {
+                                name:'xiangqing',
+                                // /:id和/:title是占位符，意为声明会接收两个名为id和title的参数
+                                path:'detail/:id/:title',
+                                component:MessageDetail
+                            }
+                        ]
+                    },
+                ]
+            }
+          ```
+    * 8.2 传递参数
+        * ```
+            <!-- 跳转路由并携带params参数，to的字符串写法，与query不同，直接在detail后面加/，并用${} -->
+            <router-link :to="`/home/message/detail/${m.id}/${m.title}`">{{m.title}}</router-link>
+            <!-- 跳转路由并携带params参数，to的对象写法，使用params参数不允许使用path属性，只能使用name属性 -->
+            <router-link :to="{
+                name:'xiangqing',
+                params:{
+                    id:m.id,
+                    title:m.title
+                }
+            }">
+                {{m.title}}
+            </router-link>
+          ```
+        * **特别注意：**路由携带params参数时，若使用to的对象写法，则不能使用path配置项，必须使用name配置
+    * 8.3 接收参数
+        * ```
+            <li>msgNumber:{{$route.params.id}}</li>
+            <li>msgTitle:{{$route.params.title}}</li>
+          ```
 
 
 
