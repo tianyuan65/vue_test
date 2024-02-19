@@ -712,7 +712,7 @@
                 },
             ]
           ```
-    * 5.2 跳转(要写完整路径)
+    * 5.2 跳转(是在组件中，需要写完整路径)
         * ```<router-link class="list-group-item" active-class="active" to="/home/news">News</router-link>```
 * 6. 路由的query参数
     * 6.1 传递参数，在MessageList组件中
@@ -753,8 +753,8 @@
                     component:HomePage,
                     children:[
                         {
-                            // 要么上面那么写，要么把父路由的全写上，就像/home/message
                             name:'xiangqing',  // 给路由命名
+                            // 要么上面那么写，要么把父路由的全写上，就像/home/message
                             path:'/home/news',
                             component:NewsList
                         }
@@ -805,7 +805,7 @@
         * ```
             <!-- 跳转路由并携带params参数，to的字符串写法，与query不同，直接在detail后面加/，并用${} -->
             <router-link :to="`/home/message/detail/${m.id}/${m.title}`">{{m.title}}</router-link>
-            <!-- 跳转路由并携带params参数，to的对象写法，使用params参数不允许使用path属性，只能使用name属性 -->
+            <!-- 跳转路由并携带params参数，to的对象写法，使用params参数不允许使用path配置项，只能使用name配置 -->
             <router-link :to="{
                 name:'xiangqing',
                 params:{
@@ -827,9 +827,9 @@
     * ```
         {
             name:'xiangqing',
-            // 传query参数
+            // 传query参数，配合第三种方法使用
             path:'detail',
-            // /:id和/:title是占位符，意为声明会接收两个名为id和title的参数
+            // /:id和/:title是占位符，意为声明会接收两个名为id和title的参数，配合第二种方法使用
             // path:'detail/:id/:title',
             component:MessageDetail,
 
@@ -852,7 +852,7 @@
       ```
 * 10. <router-link>的replace属性
     * 10.1 作用：控制路由跳转时操作浏览器历史记录的模式
-    * 10.2 浏览器的历史记录有两种写入方式：分别是push和replace，push是追加历史记录，replace是替换当前记录。路由跳转的时候默认是push
+    * 10.2 浏览器的历史记录有两种写入方式：分别是push和replace，push是追加历史记录，replace是替换当前记录，路由跳转的时候默认是push。
     * 10.3 如何开启replace模式：```<router-link replace class="list-group-item" active-class="active" to="/about">About</router-link>```
 * 11. 编程式路由导航
     * 11.1 作用：不借助<router-link>实现路由跳转，让路由更加灵活
@@ -895,9 +895,20 @@
                 this.$router.go(1)
             }
           ```
+* 12. 缓存路由组件
+    * 12.1 作用：让不展示的路由组件保持挂载，不被销毁
+    * 12.2 具体编码：
+        * ```
+            <!-- keep-alive标签，将需要缓存的路由包在里面，并配置include属性，属性值为需要缓存的路由组件名，没写进去的不管 -->
+            <keep-alive include="NewsList">
+                <!-- 占位，用于展示组件 -->
+                <router-view></router-view>
+            </keep-alive>
+          ```
 
 
 
 * 当打包构建应用时，JavaScript 包会变得非常大，影响页面加载。如果我们能把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件，这样就会更加高效
 * 总结：页面跳转就是路由跳转
 * 路由规则-key：value的组合，key是路径，value是组件，多组路由规则交由路由器(App)管理
+* keep-live缓存的是组件名！给include配置的属性值是组件名，不是其他的例如，路径path或路由规则里的name配置项的值
