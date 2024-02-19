@@ -910,6 +910,42 @@
     * 13.2 具体名字：
         * 1. activated钩子，路由组件被激活时触发
         * 2. deactivated钩子，路由组件失活时触发
+* 14. 路由守卫
+    * 14.1 作用：对路由进行权限控制
+    * 14.2 分类：全局守卫、独享守卫、组件内守卫
+    * 14.3 全局守卫：
+        * 1. 全局前置守卫
+            * ```
+                // 暴露前，加个特殊的，用于谈判商量的API，全局前置路由守卫beforeEach()，
+                // 意为每一次路由切换之前和初始化的时候，都会调用beforeEach指定的回调函数，就像御前侍卫，需要在危险来临前，就要做出及时的反应，
+                // 指定的回调接收三个参数，to、from、next，to，顾名思义，指定去哪个路径的组件；from，来自哪里；next，放行
+                router.beforeEach((to,from,next)=>{
+                    console.log('验证是否是路由切换前调用');
+                    console.log('beforeEach',to,from);
+                    // 判断，若要去的组件是NewsList或MessageList，
+                    if (to.meta.isAuth) {  //判断是否需要鉴权，这样就不用一个一个的写路径来判断了
+                        // 则再判断localStorage的name属性值是否为Osborn，是则放行
+                        if (localStorage.getItem('name')==='Osborn') {
+                            next()
+                        }else{
+                            alert('Sorry, this is Osborn’s message area')
+                        }
+                    } else {
+                        // 若不是去NewsList或MessageList组件，而是要去别的组件，比如About，也放行
+                        next()
+                    }
+                })
+              ```
+        * 2. 全局后置守卫
+            * ```
+                // 全局后置路由守卫afterEach()，会在初始化和每一次路由切换之后调用afterEach指定的回调，但只接收两个参数，就是to和from
+                router.afterEach((to,from)=>{
+                    console.log('afterEach',to,from);
+                    // 能调用后置路由守卫，就意味着路由路径切换已经完成，换title就行了
+                    document.title=to.meta.title || 'vue_test'
+                })
+              ```
+    * 14.4 独享守卫
 
 
 
@@ -918,3 +954,5 @@
 * 路由规则-key：value的组合，key是路径，value是组件，多组路由规则交由路由器(App)管理
 * keep-live缓存的是组件名！给include配置的属性值是组件名，不是其他的例如，路径path或路由规则里的name配置项的值
 * 用户点击导航区的选项，随后引起路径的改变，前端路由器监测到改变，进行规则的匹配，在合适的位置为用户展示组件
+* 从东土大唐而来--from，取西天取经--to
+* 实际项目要求: 如果登陆用户没有查看about组件的权限，左边的导航列表都没有about 这个按钮，咋实现，也就是说 router需要动态创建，而不能是死数据
